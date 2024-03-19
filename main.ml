@@ -117,3 +117,23 @@ let vrc_et_dist (i,j,k:case) (x,y,z:case): vecteur*int =
     failwith "vecteur nul" 
 ;;
 
+
+
+			(*Deuxième partie :*)
+
+(*
+Question 10 :
+*)
+
+let rec inserer_fin (l) (x)=
+	match l with
+	|[]->[x]
+	|t::q-> t::(inserer_fin t x)
+;;
+
+
+let tourner_liste (a: 'a list): 'a list =
+	match a with 
+	|[] -> []
+	|t::q -> inserer_fin q t
+;;
