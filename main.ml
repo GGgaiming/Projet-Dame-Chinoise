@@ -125,15 +125,9 @@ let vrc_et_dist (i,j,k:case) (x,y,z:case): vecteur*int =
 Question 10 :
 *)
 
-let rec inserer_fin (l) (x)=
+let rec tourner_liste (l: 'a list): 'a list =
 	match l with
-	|[]->[x]
-	|t::q-> t::(inserer_fin t x)
-;;
-
-
-let tourner_liste (a: 'a list): 'a list =
-	match a with 
 	|[] -> []
-	|t::q -> inserer_fin q t
+	|x::[] -> [x]
+	|t::q::h -> q::(tourner_liste (t::h))
 ;;
