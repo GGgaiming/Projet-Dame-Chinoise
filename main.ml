@@ -131,3 +131,10 @@ let rec tourner_liste (l: 'a list): 'a list =
 	|x::[] -> [x]
 	|t::q::h -> q::(tourner_liste (t::h))
 ;;
+
+let rec der_liste (l:'a list):'a=
+	match l with
+	|[]->[]
+	|x::[]-> x
+	|h::q -> der_liste q
+;;
