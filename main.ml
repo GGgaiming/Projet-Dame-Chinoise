@@ -138,3 +138,17 @@ let rec der_liste (l:'a list):'a=
 	|x::[]-> x
 	|h::q -> der_liste q
 ;;
+
+(*
+Question 11
+*)
+
+let rec remplir_segment (m:int)((i,j,k):case): case list =
+	match m with
+	|0 -> []
+	|x -> (i,j,k)::remplir_segment (x-1) ((i,j+1,k-1))
+;;
+
+(*
+Question 12 :	 
+*)
