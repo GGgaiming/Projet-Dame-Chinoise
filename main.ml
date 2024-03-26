@@ -152,3 +152,9 @@ let rec remplir_segment (m:int)((i,j,k):case): case list =
 (*
 Question 12 :	 
 *)
+
+let rec remplir_triangle_bas (m:int)((i,j,k):case): case list =
+	match m with 
+	|0 -> []
+	|x -> (remplir_segment m (i,j,k)) @ remplir_triangle_bas (m-1) (i-1,j+1,k)
+;;
