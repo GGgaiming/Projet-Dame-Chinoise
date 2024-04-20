@@ -29,6 +29,11 @@ Dans l'exemple dim = 3 le point est (-4,1,3)
 type case = int*int*int;;
 type vecteur = int*int*int;;
 type dimension = int;;
+type couleur= Vert | Jaune | Rouge | Noir | Bleu | Marron
+| Code of string (*une chaine restreinte a 3 caracteres*)
+| Libre;;
+type case_coloree = case * couleur ;;
+type configuration = case_coloree list * couleur list * dimension;;
 
 (*
 	Question 2:
