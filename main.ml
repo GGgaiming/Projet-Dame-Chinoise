@@ -180,7 +180,7 @@ let rec remplir_triangle_haut (m:int)((i,j,k):case): case list =
 let score (config:configuration):int = 
 	let case_liste, couleur_liste,dim = config in 
 	let t=List.hd(couleur_liste) in
-	List.fold_left (fun acc e -> let case, couleur = e in if (couleur = t) then 1+acc else 0+acc) 0 case_liste
+	List.fold_left (fun acc e -> let case, couleur = e in let i, j ,k = case in if (couleur = t) then i+acc else 0+acc) 0 case_liste
 ;;
 
-score ([((0,0,0),Vert);((0,0,0),Rouge);((0,0,0),Vert);((0,0,0),Bleu)],[Vert;Rouge],2);;
+score ([((1,0,0),Vert);((0,0,0),Rouge);((5,0,0),Vert);((0,0,0),Bleu)],[Vert;Rouge],2);;
