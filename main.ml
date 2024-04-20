@@ -183,4 +183,19 @@ let score (config:configuration):int =
 	List.fold_left (fun acc e -> let case, couleur = e in let i, j ,k = case in if (couleur = t) then i+acc else 0+acc) 0 case_liste
 ;;
 
+(* test :
+	 
 score ([((1,0,0),Vert);((0,0,0),Rouge);((5,0,0),Vert);((0,0,0),Bleu)],[Vert;Rouge],2);;
+
+*)
+let rec nombre_pion (dim:dimension):int list = 
+	match dim with
+	|0->[]
+	|_-> dim::nombre_pion (dim-1)
+;;
+
+let score_gagnant (dim:dimension):int=
+	-1 *(score (remplir_init [Vert] dim))
+;;
+
+
