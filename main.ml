@@ -188,14 +188,15 @@ let score (config:configuration):int =
 score ([((1,0,0),Vert);((0,0,0),Rouge);((5,0,0),Vert);((0,0,0),Bleu)],[Vert;Rouge],2);;
 
 *)
-let rec nombre_pion (dim:dimension):int list = 
-	match dim with
-	|0->[]
-	|_-> dim::nombre_pion (dim-1)
-;;
 
 let score_gagnant (dim:dimension):int=
 	-1 *(score (remplir_init [Vert] dim))
 ;;
 
 
+(*Q27*)
+
+let gagne (config:configuration):bool=
+	let case,couleur, dim = config in 
+	(score config) = (score_gagnant dim)
+;;
