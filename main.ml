@@ -174,6 +174,20 @@ let rec remplir_triangle_haut (m:int)((i,j,k):case): case list =
 	|x -> (remplir_segment m (i,j,k)) @ remplir_triangle_haut (m-1) (i+1,j,k-1)
 ;;
 
+(*
+Question 14
+*)
+
+let rec colorie (couleur: string)(lc: case list) =
+	match lc with 
+	|[] -> []
+	|t::q -> (t, couleur) :: colorie couleur q 
+;;
+(*
+Question 15 
+*)
+
+
 
 
 (*Q26*)
