@@ -227,10 +227,8 @@ let rec que_mes_pions (case_liste:case list) (couleur:couleur):case list=
 																			que_que_mes_pions t couleur 
 ;;
 
-let rec toutes_les_cases (dim:dimension):case_liste=
+let tester_un_mouv (case:case) ((i,j,k):int*int*int):case list=
 	
-
-let rec coup_possibles (case:case): case liste =
 
 let coup_possibles (config:configuration) (case:case_coloree):(case_coloree,coup) list =
 	let case_liste, couleur_liste, dim = config in 
