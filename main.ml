@@ -217,4 +217,22 @@ let rec est_partie (config:configuration) (cp: coup list):couleur =
 
 
 (*Q29*)
+let rec que_mes_pions (case_liste:case list) (couleur:couleur):case list=
+	(*Fonction qui renvoie la liste de tous les pions appartenant à un joueur*)
+	match case_liste with
+	|[]->[]
+	|h::t->let case, couleur_case = h if (couleur_case  = couleur) then 
+																				h::que_que_mes_pions t couleur 
+																		else 
+																			que_que_mes_pions t couleur 
+;;
+
+let rec toutes_les_cases (dim:dimension):case_liste=
+	
+
+let rec coup_possibles (case:case): case liste =
+
+let coup_possibles (config:configuration) (case:case_coloree):(case_coloree,coup) list =
+	let case_liste, couleur_liste, dim = config in 
+	mes_cases = que_que_mes_pions case_liste couleur 
 
