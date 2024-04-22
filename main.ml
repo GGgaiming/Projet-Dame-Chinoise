@@ -201,14 +201,20 @@ let gagne (config:configuration):bool=
 	(score config) = (score_gagnant dim)
 ;;
 
-
+(*Q28*)
 let rec est_partie (config:configuration) (cp: coup list):couleur =
 	let case_liste, couleur_liste, dim = config in 
 	if cp =[] then 
 		Libre
 	else 
-		config= appliquer_coup config List.hd(cp)
-		if gagne config 
+		config = appliquer_coup config List.hd(cp)
+		if (gagne config) then
 			List.hd(cp)
 		else
-			  
+			est_partie (tourner_config config) List.tl(cp)
+;;
+
+
+
+(*Q29*)
+
