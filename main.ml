@@ -187,6 +187,18 @@ let rec colorie (couleur: string)(lc: case list) =
 Question 15 
 *)
 
+let tourner_config (conf:configuration):configuration=
+let lcase,lcoul,dim=conf in
+    let rec aux (lcase:case_coloree list)=
+        match lcase with
+        |[]->[]
+        |(case,coul)::fin->(tourner_case (6/(List.length lcoul)) case,coul)::(aux fin)
+    in
+(aux lcase),tourner_liste lcoul,dim;;
+
+(*
+Question 16
+*)
 
 
 
