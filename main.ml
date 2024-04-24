@@ -96,7 +96,7 @@ let sont_cases_voisines ((i,j,k):case) ((x,y,z):case):bool=
 (*
 	Question 8 :
 *)
-
+"""
 let calcul_pivot (i,j,k:case) (x,y,z:case):case option=
 match x,y,z with 
 |i,_,_ -> Some((i+x)/2,(j+y)/2,(k+z)/2)
@@ -104,7 +104,12 @@ match x,y,z with
 |_,_,k -> Some((i+x)/2,(j+y)/2,(k+z)/2)
 |_,_,_ -> None
 ;;
-
+"""
+(*Autre version de la question 8 car elle ne marche pas*)
+let calcul_pivot ((i,j,k):case) ((a,b,c):case):case option=
+if (a+i) mod 2=0 && (b+j) mod 2=0 && (c+k) mod 2=0 then
+Some ((a+i)/2,(b+j)/2,(c+k)/2)
+else None;;
 
 (*
 	Question 9 :
@@ -305,12 +310,6 @@ match p with
 |None->false
 |Some(a,b,c)->(est_libre_seg c1 (a,b,c) conf)&&(est_libre_seg (a,b,c) c2 conf)
 ;;
-
-(*Autre version de la question 8 car elle ne marche pas*)
-let calcul_pivot ((i,j,k):case) ((a,b,c):case):case option=
-if (a+i) mod 2=0 && (b+j) mod 2=0 && (c+k) mod 2=0 then
-Some ((a+i)/2,(b+j)/2,(c+k)/2)
-else None;;
 
 (*
     Question 24 :	 
