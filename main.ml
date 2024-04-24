@@ -247,6 +247,36 @@ match cp with
 |_-> failwith "Saut multiples non implementes"
 ;;
 
+
+(*
+    Question 20 :	 
+    *)
+
+let appliquer_coup (conf:configuration) (cp:coup):configuration=
+let lcase,lcoul,dim=conf in
+match cp with
+|Du(c1,c2)->let lcase2=(c2,quelle_couleur c1 conf)::lcase in
+            (supprime_dans_config (lcase2,lcoul,dim) c1)
+;;
+
+(*
+    Question 21 :	 
+    *)
+
+
+let mettre_a_jour_configuration (conf:configuration) (cp:coup):configuration=
+match cp with
+|Du(c1,c2) -> if not (est_coup_valide conf (Du(c1,c2))) then 
+    failwith "Ce coup n’est pas valide, le joueur doit rejouer"
+    else appliquer_coup conf (Du(c1,c2))
+   
+|_-> failwith "Saut multiples non implementes"
+;;
+
+
+
+
+
 (*Q26*)
 let score (config:configuration):int = 
 	let case_liste, couleur_liste,dim = config in 
