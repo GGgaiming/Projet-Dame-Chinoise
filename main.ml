@@ -274,6 +274,57 @@ match cp with
 ;;
 
 
+(*
+    Question 22 :	 
+    *)
+
+let est_libre_seg (c1:case) (c2:case) (conf:configuration):bool=
+let (v,d)=(vec_et_dist c1 c2) in
+let rec aux (v,d:vecteur*int) (c1:case) (c2:case)=
+    let (i,j,k)=v in
+    match d with
+    |0->true
+    |1->true
+    |n->(let (a,b,c)=c1 in (quelle_couleur ((a+(n-1)*i),(b+(n-1)*j),(c+(n-1)*k)) conf)=Libre)&&(aux (v,(n-2)) c1 c2) 
+    in
+aux (v,d) c1 c2;;
+"""
+let conf2=([((0,0,0),Bleu);((1,1,1),Libre);((2,2,2),Bleu)],[Bleu],3)
+let conf3=([((0,0,0),Libre);((1,1,1),Bleu);((2,2,2),Bleu)],[Bleu],3)
+"""
+
+(*
+    Question 23 :	 
+    *)
+
+let est_saut (c1:case) (c2:case) (conf:configuration):bool=
+let lcase,lcoul,dim=conf in
+let pr::fin=lcoul in
+let p=calcul_pivot c1 c2 in
+match p with
+|None->false
+|Some(a,b,c)->(est_libre_seg c1 (a,b,c) conf)&&(est_libre_seg (a,b,c) c2 conf)
+;;
+
+(*Autre version de la question 8 car elle ne marche pas*)
+let calcul_pivot ((i,j,k):case) ((a,b,c):case):case option=
+if (a+i) mod 2=0 && (b+j) mod 2=0 && (c+k) mod 2=0 then
+Some ((a+i)/2,(b+j)/2,(c+k)/2)
+else None;;
+
+(*
+    Question 24 :	 
+    *)
+
+let rec est_saut_multiple (lcase:case list)(conf:configuration):bool=
+match lcase with
+|[]->true
+|[(i,j,k)]->true
+|c1::c2::fin->(est_saut c1 c2 conf)&&(est_saut_multiple ([c2]@fin) conf)
+;;
+
+
+
 
 
 
