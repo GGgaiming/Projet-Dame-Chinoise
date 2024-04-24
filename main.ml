@@ -202,6 +202,51 @@ Question 16
 
 
 
+
+
+(*
+    Question 17 :	 
+    *)
+
+let rec associe (a:'a) (l:('a*'b) list) (defaut:'b):'b =
+match l with
+|[]->defaut
+|(e,c)::fin->if e=a then c else associe a fin defaut
+;;
+
+let quelle_couleur (c:case) (conf:configuration):couleur=
+let lcase,lcoul,dim=conf in
+associe c lcase Libre;;
+
+(*
+    Question 18 :	 
+    *)
+
+let  supprime_dans_config (conf:configuration) (c:case):configuration=
+let lcase,lcoul,dim=conf in
+let rec aux (lcase:case_coloree list):case_coloree list=
+    match lcase with
+    |[]->[]
+    |(c,_)::fin->fin
+    |pr::fin->(aux fin)
+in
+(aux lcase),lcoul,dim;;
+
+(*
+    Question 19 :	 
+    *)
+
+type coup = Du of case * case | Sm of case list;;
+
+let est_coup_valide (conf:configuration) (cp:coup):bool=
+match cp with
+|Du(c1,c2) ->
+    let lcase,lcoul,dim=conf in
+    (sont_cases_voisines c1 c2)&&((associe c1 lcase Libre)=(List.hd lcoul))
+    &&(associe c2 lcase Libre =Libre)&&(est_dans_losange c2 dim)
+|_-> failwith "Saut multiples non implementes"
+;;
+
 (*Q26*)
 let score (config:configuration):int = 
 	let case_liste, couleur_liste,dim = config in 
