@@ -96,16 +96,7 @@ let sont_cases_voisines ((i,j,k):case) ((x,y,z):case):bool=
 (*
 	Question 8 :
 *)
-"""
-let calcul_pivot (i,j,k:case) (x,y,z:case):case option=
-match x,y,z with 
-|i,_,_ -> Some((i+x)/2,(j+y)/2,(k+z)/2)
-|_,j,_ -> Some((i+x)/2,(j+y)/2,(k+z)/2)
-|_,_,k -> Some((i+x)/2,(j+y)/2,(k+z)/2)
-|_,_,_ -> None
-;;
-"""
-(*Autre version de la question 8 car elle ne marche pas*)
+
 let calcul_pivot ((i,j,k):case) ((a,b,c):case):case option=
 if (a+i) mod 2=0 && (b+j) mod 2=0 && (c+k) mod 2=0 then
 Some ((a+i)/2,(b+j)/2,(c+k)/2)
