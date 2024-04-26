@@ -205,20 +205,18 @@ let lcase,lcoul,dim=conf in
 Question 16
 *)
 
-(*Proposition*)
+let remplir_init (l:couleur list)(d:dimension):configuration=
+let nbj=(List.length l) in
+let rec aux (conf:configuration)=
+	let lc,lcoul,dim=conf in
+	match lc,lcoul with
+	|lc,[]->let lc3,lcoul,dim=(tourner_config (lc,[Bleu],dim)) in lc3,l,dim
+	|lc,pr::fin->let lc3,lcoul,dim=tourner_config (lc,[Bleu],dim) in 
+			let lc2=lc@colorie pr (remplir_triangle_bas d (-d-1,d-2,d)) in
+			aux (List.map (fun (a,b)->((tourner_case (6/(List.length l)) a),b))lc2,fin,dim)
+	in
+aux ([],l,d);;
 
-let rec plateau_init (liste_joueur:couleur list) (dim:dimension):case_coloree list=
-	match liste_joueur with 
-	|[] -> []
-	|h::t -> colorie h (remplir_triangle_bas dim (-2*dim+dim-1,dim-(dim-1),dim))
-;;
-plateau_init [Vert;Rouge] 3;;
-
-let rec remplir_init (liste_joueur:couleur list) (dim:dimension):configuration=
-	match liste_joueur with
-	|[] -> ([],liste_joueur,dim)
-	|h::t -> let liste_case,liste_joueur2,dim = tourner_config(remplir_init t dim) in ((plateau_init [h] dim)@liste_case,liste_joueur,dim)
-;;
 remplir_init [Vert;Rouge;Jaune] 3;;
 ((plateau_init h dim)@liste_case,liste_joueur2,dim)
 
