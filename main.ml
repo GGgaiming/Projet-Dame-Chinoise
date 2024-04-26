@@ -323,6 +323,47 @@ match lcase with
 ;;
 
 
+(*
+    Question 25 :	 
+    *)
+
+
+
+let est_coup_valide (conf:configuration) (cp:coup):bool=
+match cp with
+|Du(c1,c2) ->
+    let lcase,lcoul,dim=conf in
+    (sont_cases_voisines c1 c2)&&((associe c1 lcase Libre)=(List.hd lcoul))
+    &&(associe c2 lcase Libre =Libre)&&(est_dans_losange c2 dim)
+|Sm([])->true
+|Sm(pr::fin)-> est_saut_multiple (pr::fin) conf
+;;
+
+
+
+let appliquer_coup (conf:configuration) (cp:coup):configuration=
+let lcase,lcoul,dim=conf in
+match cp with
+|Du(c1,c2)->let lcase4=[(c1,Libre)]@[(c2,quelle_couleur c1 conf)] in
+			let lcase2,lcoul,dim=(supprime_dans_config conf c1) in
+			let lcase3,lcoul,dim=(supprime_dans_config (lcase2,lcoul,dim) c2) in
+			lcase4@lcase3,lcoul,dim
+|Sm(l)->let lcase2=[(List.hd l,Libre)]@[(der_liste l,(quelle_couleur (List.hd l) conf))] in
+		let lcase3,lcoul,dim=(supprime_dans_config (lcase,lcoul,dim) (List.hd l)) in
+		let lcase4,lcoul,dim=(supprime_dans_config (lcase3,lcoul,dim) (der_liste l)) in
+		lcase2@lcase4,lcoul,dim
+;;
+
+let mettre_a_jour_configuration (conf:configuration) (cp:coup): configuration=
+	if est_coup_valide conf cp then appliquer_coup conf cp
+	else failwith "Ce coup n'est pas valide, le joueur doit rejouer"
+
+(*Version de der_liste pour les case list uniquement car ça ne fonctionnait pas*)
+let rec der_liste (l: case list): case=
+	match l with
+	|[x]-> x
+	|h::q -> (der_liste q)
+;;
 
 
 
