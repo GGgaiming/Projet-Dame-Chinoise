@@ -407,32 +407,49 @@ let rec est_partie (config:configuration) (cp: coup list):couleur =
 
 
 (*Q29*)
-let rec que_mes_pions (case_liste:case list) (couleur:couleur):case list=
-	(*Fonction qui renvoie la liste de tous les pions appartenant à un joueur*)
-	match case_liste with
-	|[]->[]
-	|h::t->let case, couleur_case = h if (couleur_case  = couleur) then 
-																				h::que_que_mes_pions t couleur 
-																		else 
-																			que_que_mes_pions t couleur 
+(*Q29*)
+
+
+let rec faire_un_triangle (dim:dimension) ((i,j,k):case) : case list =
+	match dim with
+	|1->[(i,j,k)]
+	|_->(remplir_segment dim (i,j,k))@faire_un_triangle (dim-1) (i-1,j+1,k)
 ;;
 
-let generer_cases_plateau taille =
-  let rec aux (x:int) (y:int) (z:int) (acc:case list):case list=
-    if x < taille && y < taille && z < taille then
-      aux x y (z + 1) ({x=x;y=y;z=z} :: acc)
-    else if x < taille && y < taille then
-      aux x (y + 1) 0 acc
-    else if x < taille then
-      aux (x + 1) 0 0 acc
-    else
-      acc
-  in
-  aux 0 0 0 []
+let  toutes_les_cases (config:configuration):case list =
+	let liste_case, liste_couleur, dim = config in
+	let liste_sortie = (faire_un_triangle (2*dim) (-1,dim-1,dim))@(remplir_segment (2*dim+1) (0,-1*dim,dim)) in
+	let rec aux (lcase:case list)=
+		match lcase with
+		|[]->[]
+		|case::fin->(tourner_case (6/(List.length liste_couleur)) case)::(aux fin)
+	in
+	(aux liste_sortie)@(faire_un_triangle (2*dim) (-1,dim-1,dim))
 ;;
 
 
-let toutes_les_cases (dim:dimension):case list =
+toutes_les_cases ([],[Vert;Rouge],1);;
+
+let rec liste_des_coups (config:configuration) (case:case):(case*coup)list=
+	(*parcours la liste de case et test si un coup partant de la case en paramètres peut arriver a la case de la liste*)
+	let liste_case, liste_couleur, dim = config in
+	match liste_case with 
+	|[] -> []
+	|(cs,couleur)::t -> if est_coup_valide (config) (Du(cs,case)) then (case,Du(cs,case))::liste_des_coups (t,liste_couleur,dim) case else liste_des_coups (t,liste_couleur,dim) case
+;;
+
+let rec test_des_coups (config:configuration):(case * coup) list=
+	let liste_cases,liste_couleur,dim = config in 
+	match liste_cases with 
+	|[] -> []
+	|(case,coul)::t -> (liste_des_coups (t,liste_couleur,dim) case )@(test_des_coups (t,liste_couleur,dim))
+;;
+
+let coup_possibles (config:configuration) (case:case_coloree):(case*coup) list =
+	let case_liste, couleur_liste, dim = config in 
+	let les_cases = toutes_les_cases config  in 
+	test_des_coups (colorie Vert les_cases,couleur_liste,dim)
+;;
 	
 
 let coup_possibles (config:configuration) (case:case_coloree):(case_coloree,coup) list =
