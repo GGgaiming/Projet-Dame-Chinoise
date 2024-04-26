@@ -183,7 +183,7 @@ let rec remplir_triangle_haut (m:int)((i,j,k):case): case list =
 Question 14
 *)
 
-let rec colorie (couleur: string)(lc: case list) =
+let rec colorie (couleur: couleur)(lc: case list) =
 	match lc with 
 	|[] -> []
 	|t::q -> (t, couleur) :: colorie couleur q 
@@ -205,9 +205,22 @@ let lcase,lcoul,dim=conf in
 Question 16
 *)
 
+(*Proposition*)
 
+let rec plateau_init (liste_joueur:couleur list) (dim:dimension):case_coloree list=
+	match liste_joueur with 
+	|[] -> []
+	|h::t -> colorie h (remplir_triangle_bas dim (-2*dim+dim-1,dim-(dim-1),dim))
+;;
+plateau_init [Vert;Rouge] 3;;
 
-
+let rec remplir_init (liste_joueur:couleur list) (dim:dimension):configuration=
+	match liste_joueur with
+	|[] -> ([],liste_joueur,dim)
+	|h::t -> let liste_case,liste_joueur2,dim = tourner_config(remplir_init t dim) in ((plateau_init [h] dim)@liste_case,liste_joueur,dim)
+;;
+remplir_init [Vert;Rouge;Jaune] 3;;
+((plateau_init h dim)@liste_case,liste_joueur2,dim)
 
 (*
     Question 17 :	 
