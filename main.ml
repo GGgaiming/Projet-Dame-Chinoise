@@ -26,6 +26,8 @@ Dans l'exemple dim = 3 le point est (-4,1,3)
 *)
 
 
+
+
 type case = int*int*int;;
 type vecteur = int*int*int;;
 type dimension = int;;
@@ -133,22 +135,26 @@ let rec tourner_liste (l: 'a list): 'a list =
 	|t::q::h -> q::(tourner_liste (t::h))
 ;;
 
-let rec der_liste (l:'a list):'a=
+let rec der_liste (l: 'a list): 'a=
 	match l with
 	|[]->[]
-	|x::[]-> x
-	|h::q -> der_liste q
+	|[x]-> x
+	|h::q -> (der_liste q)
 ;;
+
 
 (*
 Question 11
 *)
+
 
 let rec remplir_segment (m:int) ((i,j,k):case):case list=
 match m with
 |1->[(i,j,k)]
 |x->(remplir_segment (x-1) (i,j,k))@[i,(j+(x-1)),(k-(x-1))]
 ;;
+
+
 
 (*
 Question 12 :	 
@@ -171,16 +177,17 @@ let rec remplir_triangle_haut (m:int)((i,j,k):case): case list =
 ;;
 
 (*
-Question 14
+Question 14 :	 
 *)
 
-let rec colorie (couleur: couleur)(lc: case list) =
-	match lc with 
-	|[] -> []
-	|t::q -> (t, couleur) :: colorie couleur q 
+let rec colorie (c:couleur) (lc:case list): case_coloree list=
+match lc with
+|[]->[]
+|pr::fin->let (i,j,k)=pr in ((i,j,k),c)::(colorie c fin)
 ;;
+
 (*
-Question 15 
+Question 15 :	 
 *)
 
 let tourner_config (conf:configuration):configuration=
@@ -193,8 +200,9 @@ let lcase,lcoul,dim=conf in
 (aux lcase),tourner_liste lcoul,dim;;
 
 (*
-Question 16
-*)
+    Question 16 :	 
+    *)
+
 
 let remplir_init (l:couleur list)(d:dimension):configuration=
 let nbj=(List.length l) in
@@ -203,13 +211,10 @@ let rec aux (conf:configuration)=
 	match lc,lcoul with
 	|lc,[]->let lc3,lcoul,dim=(tourner_config (lc,[Bleu],dim)) in lc3,l,dim
 	|lc,pr::fin->let lc3,lcoul,dim=tourner_config (lc,[Bleu],dim) in 
-			let lc2=lc@colorie pr (remplir_triangle_bas d (-d-1,d-2,d)) in
-			aux (List.map (fun (a,b)->((tourner_case (6/(List.length l)) a),b))lc2,fin,dim)
+					let lc2=lc@colorie pr (remplir_triangle_bas d (-d-1,d-2,d)) in
+					aux (List.map (fun (a,b)->((tourner_case (6/(List.length l)) a),b))lc2,fin,dim)
 	in
 aux ([],l,d);;
-
-remplir_init [Vert;Rouge;Jaune] 3;;
-((plateau_init h dim)@liste_case,liste_joueur2,dim)
 
 (*
     Question 17 :	 
