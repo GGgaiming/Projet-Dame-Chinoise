@@ -115,7 +115,7 @@ else None;;
 	Question 9 :
 *)
 
-let vrc_et_dist (i,j,k:case) (x,y,z:case): vecteur*int =
+let vec_et_dist (i,j,k:case) (x,y,z:case): vecteur*int =
 	let a,b,c =diff_case (i,j,k) (x,y,z) in
 	if (a<>0) then 
 		((a/a,b/a,c/a),abs(a))
@@ -378,8 +378,19 @@ let rec que_mes_pions (case_liste:case list) (couleur:couleur):case list=
 																			que_que_mes_pions t couleur 
 ;;
 
-let tester_un_mouv (case:case) ((i,j,k):int*int*int):case list=
-	
+let generer_cases_plateau taille =
+  let rec aux (x:int) (y:int) (z:int) (acc:case list):case list=
+    if x < taille && y < taille && z < taille then
+      aux x y (z + 1) ({x=x;y=y;z=z} :: acc)
+    else if x < taille && y < taille then
+      aux x (y + 1) 0 acc
+    else if x < taille then
+      aux (x + 1) 0 0 acc
+    else
+      acc
+  in
+  aux 0 0 0 []
+;;
 
 let coup_possibles (config:configuration) (case:case_coloree):(case_coloree,coup) list =
 	let case_liste, couleur_liste, dim = config in 
