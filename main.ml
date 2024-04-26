@@ -135,13 +135,11 @@ let rec tourner_liste (l: 'a list): 'a list =
 	|t::q::h -> q::(tourner_liste (t::h))
 ;;
 
-let rec der_liste (l: 'a list): 'a=
+let rec der_liste (l: case list): case=
 	match l with
-	|[]->[]
 	|[x]-> x
 	|h::q -> (der_liste q)
 ;;
-
 
 (*
 Question 11
@@ -364,13 +362,6 @@ match cp with
 let mettre_a_jour_configuration (conf:configuration) (cp:coup): configuration=
 	if est_coup_valide conf cp then appliquer_coup conf cp
 	else failwith "Ce coup n'est pas valide, le joueur doit rejouer"
-
-(*Version de der_liste pour les case list uniquement car ça ne fonctionnait pas*)
-let rec der_liste (l: case list): case=
-	match l with
-	|[x]-> x
-	|h::q -> (der_liste q)
-;;
 
 
 
