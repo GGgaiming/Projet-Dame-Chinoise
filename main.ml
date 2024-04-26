@@ -433,6 +433,10 @@ let generer_cases_plateau taille =
   aux 0 0 0 []
 ;;
 
+
+let toutes_les_cases (dim:dimension):case list =
+	
+
 let coup_possibles (config:configuration) (case:case_coloree):(case_coloree,coup) list =
 	let case_liste, couleur_liste, dim = config in 
 	mes_cases = que_que_mes_pions case_liste couleur 
