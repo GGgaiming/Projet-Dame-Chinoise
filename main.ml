@@ -431,8 +431,23 @@ let rec liste_des_coups (config:configuration) (case:case):(case*coup)list=
 	let liste_case, liste_couleur, dim = config in
 	match liste_case with 
 	|[] -> []
-	|(cs,couleur)::t -> if est_coup_valide (config) (Du(case,coup)) then (case,Du(case,coup))::liste_des_coups (t,liste_couleur,dim) case else liste_des_coups (t,liste_couleur,dim) case
+	|(cs,couleur)::t -> if est_coup_valide (config) (Du(case,cs)) then (case,Du(case,cs))::liste_des_coups (t,liste_couleur,dim) case else liste_des_coups (t,liste_couleur,dim) case
 ;;
+
+let rec faire_les_sm (cp:coup) (liste_case:case liste): coup list=
+	match liste_case with
+	|[]->[]
+	|h::t -> 
+
+let conversion_cp (cp:coup) (liste_case:case list):coup=
+	(*fonction qui convertit les coup Du en coup sm si besoin*)
+	match cp with 
+	|Du(c1,c2) when sont_cases_voisines c1 c2 -> cp
+	|Du(c1,c2) -> 
+;;
+
+
+
 
 let rec test_des_coups (config:configuration):(case * coup) list=
 	let liste_cases,liste_couleur,dim = config in 
