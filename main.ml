@@ -80,8 +80,7 @@ let translate ((i,j,k): case) ((v1,v2,v3): vecteur) : case =
 (*
 	Question 6 :
 *)
-let diff_case ((i,j,k): case) ((v1,v2,v3): vecteur) : case =
-(i-v1,j-v2,k-v3);;
+let diff_case ((i,j,k): case) ((v1,v2,v3): vecteur) : case = (i-v1,j-v2,k-v3);;
 
 
 (*
@@ -448,11 +447,10 @@ let rec test_des_coups (config:configuration):(case * coup) list=
 let coup_possibles (config:configuration) (case:case_coloree):(case*coup) list =
 	let case_liste, couleur_liste, dim = config in 
 	let les_cases = toutes_les_cases config  in 
-	test_des_coups (colorie Vert les_cases,couleur_liste,dim)
+	let cs, couleur = case in
+	liste_des_coups (colorie Vert les_cases,couleur_liste,dim) cs
 ;;
-	
 
-let coup_possibles (config:configuration) (case:case_coloree):(case_coloree,coup) list =
-	let case_liste, couleur_liste, dim = config in 
-	mes_cases = que_que_mes_pions case_liste couleur 
+
+
 
