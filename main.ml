@@ -393,19 +393,16 @@ let gagne (config:configuration):bool=
 (*Q28*)
 let rec est_partie (config:configuration) (cp: coup list):couleur =
 	let case_liste, couleur_liste, dim = config in 
-	if cp =[] then 
+	if (cp = []) then 
 		Libre
 	else 
-		config = appliquer_coup config List.hd(cp)
+		let config = appliquer_coup config (List.hd(cp)) in
 		if (gagne config) then
-			List.hd(cp)
+			List.hd(couleur_liste)
 		else
 			est_partie (tourner_config config) List.tl(cp)
 ;;
 
-
-
-(*Q29*)
 (*Q29*)
 
 
@@ -434,7 +431,7 @@ let rec liste_des_coups (config:configuration) (case:case):(case*coup)list=
 	let liste_case, liste_couleur, dim = config in
 	match liste_case with 
 	|[] -> []
-	|(cs,couleur)::t -> if est_coup_valide (config) (Du(cs,case)) then (case,Du(cs,case))::liste_des_coups (t,liste_couleur,dim) case else liste_des_coups (t,liste_couleur,dim) case
+	|(cs,couleur)::t -> if est_coup_valide (config) (Du(case,coup)) then (case,Du(case,coup))::liste_des_coups (t,liste_couleur,dim) case else liste_des_coups (t,liste_couleur,dim) case
 ;;
 
 let rec test_des_coups (config:configuration):(case * coup) list=
@@ -463,9 +460,29 @@ let rec que_mes_pions (liste_case:case_coloree list) (coul:couleur):case_coloree
 												que_mes_pions t coul
 ;;
 
+let rec tous_les_coups (liste_case:case_coloree list) (config:configuration):(case * coup) list =
+	match liste_case with 
+	|[] -> []
+	|h::t -> (coup_possibles config h)@tous_les_coups t config
+;;
 
+let score_coup (cp:coup):int=
+	(*fonction qui calcul le score gagner par un coup*)
+	match cp with
+	|Du(c1,c2)-> let i , j , k = c1 in let i2 , j2 , k2 = c2 in abs (i2-i)
+;;
+
+
+let rec heuristique (liste_coup :(case * coup) list):coup = 
+	let (cs1,cp1)::reste = liste_coup in 
+	List.fold_left (fun acc e -> let (c,cp) = e  in if (score_coup acc) < (score_coup cp) then cp else acc) cp1 liste_coup
+;;
 
 
 let strategie_gloutonne (config:configuration):coup=
 	let liste_case, liste_couleur,dim = config in
-	let mes_cases = que_mes_pions (liste_case)
+	let ma_coul::reste = liste_couleur in 
+	let mes_cases = que_mes_pions (liste_case) ma_coul in
+	let coup_liste = tous_les_coups mes_cases config in
+	heuristique coup_liste
+;;
