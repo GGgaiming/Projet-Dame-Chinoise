@@ -448,9 +448,24 @@ let coup_possibles (config:configuration) (case:case_coloree):(case*coup) list =
 	let case_liste, couleur_liste, dim = config in 
 	let les_cases = toutes_les_cases config  in 
 	let cs, couleur = case in
-	liste_des_coups (colorie Vert les_cases,couleur_liste,dim) cs
+	liste_des_coups ((colorie Libre les_cases)@case_liste,couleur_liste,dim) cs
+;;
+
+
+(*Q30*)
+let rec que_mes_pions (liste_case:case_coloree list) (coul:couleur):case_coloree list=
+	(*Fonction qui en prenant en paramètre une liste de case colorer et une couleur rend la liste des case appartenant à ctte couleur*)
+	match liste_case with
+	|[]->[]
+	|(case,coul2)::t -> if coul2 = coul then 
+												(case,coul2)::que_mes_pions t coul
+											else
+												que_mes_pions t coul
 ;;
 
 
 
 
+let strategie_gloutonne (config:configuration):coup=
+	let liste_case, liste_couleur,dim = config in
+	let mes_cases = que_mes_pions (liste_case)
