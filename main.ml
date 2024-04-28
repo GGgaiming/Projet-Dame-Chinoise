@@ -418,7 +418,7 @@ let  toutes_les_cases (config:configuration):case list =
 	let rec aux (lcase:case list)=
 		match lcase with
 		|[]->[]
-		|case::fin->(tourner_case (6/(List.length liste_couleur)) case)::(aux fin)
+		|case::fin->(tourner_case (3) case)::(aux fin)
 	in
 	(aux liste_sortie)@(faire_un_triangle (2*dim) (-1,dim-1,dim))
 ;;
