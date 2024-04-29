@@ -73,8 +73,7 @@ match m with
 	Question 5 :
 *)
 
-let translate ((i,j,k): case) ((v1,v2,v3): vecteur) : case =
-(i+v1,j+v2,k+v3);;
+let translate ((i,j,k): case) ((v1,v2,v3): vecteur) : case = (i+v1,j+v2,k+v3);;
 
 
 (*
@@ -99,9 +98,11 @@ let sont_cases_voisines ((i,j,k):case) ((x,y,z):case):bool=
 *)
 
 let calcul_pivot ((i,j,k):case) ((a,b,c):case):case option=
-if (a+i) mod 2=0 && (b+j) mod 2=0 && (c+k) mod 2=0 then
-Some ((a+i)/2,(b+j)/2,(c+k)/2)
-else None;;
+	if (a+i) mod 2=0 && (b+j) mod 2=0 && (c+k) mod 2=0 then
+		Some ((a+i)/2,(b+j)/2,(c+k)/2)
+	else 
+		None
+;;
 
 (*
 	Question 9 :
@@ -178,9 +179,9 @@ Question 14 :
 *)
 
 let rec colorie (c:couleur) (lc:case list): case_coloree list=
-match lc with
-|[]->[]
-|pr::fin->let (i,j,k)=pr in ((i,j,k),c)::(colorie c fin)
+	match lc with
+	|[]->[]
+	|pr::fin->let (i,j,k)=pr in ((i,j,k),c)::(colorie c fin)
 ;;
 
 (*
@@ -188,13 +189,14 @@ Question 15 :
 *)
 
 let tourner_config (conf:configuration):configuration=
-let lcase,lcoul,dim=conf in
-    let rec aux (lcase:case_coloree list)=
-        match lcase with
-        |[]->[]
-        |(case,coul)::fin->(tourner_case (6/(List.length lcoul)) case,coul)::(aux fin)
-    in
-(aux lcase),tourner_liste lcoul,dim;;
+	let lcase,lcoul,dim=conf in
+			let rec aux (lcase:case_coloree list)=
+				match lcase with
+				|[]->[]
+				|(case,coul)::fin->(tourner_case (6/(List.length lcoul)) case,coul)::(aux fin)
+			in
+	(aux lcase),tourner_liste lcoul,dim
+;;
 
 (*
     Question 16 :	 
@@ -202,7 +204,6 @@ let lcase,lcoul,dim=conf in
 
 
 let remplir_init (l:couleur list)(d:dimension):configuration=
-let nbj=(List.length l) in
 let rec aux (conf:configuration)=
 	let lc,lcoul,dim=conf in
 	match lc,lcoul with
@@ -361,6 +362,7 @@ match cp with
 let mettre_a_jour_configuration (conf:configuration) (cp:coup): configuration=
 	if est_coup_valide conf cp then appliquer_coup conf cp
 	else failwith "Ce coup n'est pas valide, le joueur doit rejouer"
+;;
 
 
 
@@ -414,17 +416,22 @@ let rec faire_un_triangle (dim:dimension) ((i,j,k):case) : case list =
 
 let  toutes_les_cases (config:configuration):case list =
 	let liste_case, liste_couleur, dim = config in
-	let liste_sortie = (faire_un_triangle (2*dim) (-1,dim-1,dim))@(remplir_segment (2*dim+1) (0,-1*dim,dim)) in
+	let liste_sortie = (faire_un_triangle (2*dim) (-1,(-1*dim)-1,dim))@(remplir_segment (2*dim+1) (0,-1*dim,dim)) in
 	let rec aux (lcase:case list)=
 		match lcase with
 		|[]->[]
 		|case::fin->(tourner_case (3) case)::(aux fin)
 	in
-	(aux liste_sortie)@(faire_un_triangle (2*dim) (-1,dim-1,dim))
+	(aux liste_sortie)@(faire_un_triangle (2*dim) (-1,(-1*dim)-1,dim))
 ;;
 
 
 toutes_les_cases ([],[Vert;Rouge],1);;
+
+
+List.map (fun e -> est_dans_etoile e 2) (toutes_les_cases ([],[Bleu],2));;
+
+toutes_les_cases ([],[Bleu],2);;
 
 let rec liste_des_coups (config:configuration) (case:case):(case*coup)list=
 	(*parcours la liste de case et test si un coup partant de la case en paramètres peut arriver a la case de la liste*)
