@@ -219,14 +219,15 @@ aux ([],l,d);;
     *)
 
 let rec associe (a:'a) (l:('a*'b) list) (defaut:'b):'b =
-match l with
-|[]->defaut
-|(e,c)::fin->if e=a then c else associe a fin defaut
+	match l with
+	|[]->defaut
+	|(e,c)::fin->if e=a then c else associe a fin defaut
 ;;
 
 let quelle_couleur (c:case) (conf:configuration):couleur=
-let lcase,lcoul,dim=conf in
-associe c lcase Libre;;
+	let lcase,lcoul,dim=conf in
+	associe c lcase Libre
+;;
 
 (*
     Question 18 :	 
@@ -263,10 +264,10 @@ match cp with
     *)
 
 let appliquer_coup (conf:configuration) (cp:coup):configuration=
-let lcase,lcoul,dim=conf in
-match cp with
-|Du(c1,c2)->let lcase2=(c2,quelle_couleur c1 conf)::lcase in
-            (supprime_dans_config (lcase2,lcoul,dim) c1)
+	let lcase,lcoul,dim=conf in
+	match cp with
+	|Du(c1,c2)->let lcase2=(c2,quelle_couleur c1 conf)::lcase in
+  	          (supprime_dans_config (lcase2,lcoul,dim) c1)
 ;;
 
 (*
@@ -308,12 +309,12 @@ let conf3=([((0,0,0),Libre);((1,1,1),Bleu);((2,2,2),Bleu)],[Bleu],3)
     *)
 
 let est_saut (c1:case) (c2:case) (conf:configuration):bool=
-let lcase,lcoul,dim=conf in
-let pr::fin=lcoul in
-let p=calcul_pivot c1 c2 in
-match p with
-|None->false
-|Some(a,b,c)->(est_libre_seg c1 (a,b,c) conf)&&(est_libre_seg (a,b,c) c2 conf)
+	let lcase,lcoul,dim=conf in
+	let pr::fin=lcoul in
+	let p=calcul_pivot c1 c2 in
+	match p with
+	|None->false
+	|Some(a,b,c)->(est_libre_seg c1 (a,b,c) conf)&&(est_libre_seg (a,b,c) c2 conf)
 ;;
 
 (*
@@ -347,16 +348,16 @@ match cp with
 
 
 let appliquer_coup (conf:configuration) (cp:coup):configuration=
-let lcase,lcoul,dim=conf in
-match cp with
-|Du(c1,c2)->let lcase4=[(c1,Libre)]@[(c2,quelle_couleur c1 conf)] in
-			let lcase2,lcoul,dim=(supprime_dans_config conf c1) in
-			let lcase3,lcoul,dim=(supprime_dans_config (lcase2,lcoul,dim) c2) in
-			lcase4@lcase3,lcoul,dim
-|Sm(l)->let lcase2=[(List.hd l,Libre)]@[(der_liste l,(quelle_couleur (List.hd l) conf))] in
-		let lcase3,lcoul,dim=(supprime_dans_config (lcase,lcoul,dim) (List.hd l)) in
-		let lcase4,lcoul,dim=(supprime_dans_config (lcase3,lcoul,dim) (der_liste l)) in
-		lcase2@lcase4,lcoul,dim
+	let lcase,lcoul,dim=conf in
+	match cp with
+	|Du(c1,c2)->let lcase4=[(c1,Libre)]@[(c2,quelle_couleur c1 conf)] in
+				let lcase2,lcoul,dim=(supprime_dans_config conf c1) in
+				let lcase3,lcoul,dim=(supprime_dans_config (lcase2,lcoul,dim) c2) in
+				lcase4@lcase3,lcoul,dim
+	|Sm(l)->let lcase2=[(List.hd l,Libre)]@[(der_liste l,(quelle_couleur (List.hd l) conf))] in
+			let lcase3,lcoul,dim=(supprime_dans_config (lcase,lcoul,dim) (List.hd l)) in
+			let lcase4,lcoul,dim=(supprime_dans_config (lcase3,lcoul,dim) (der_liste l)) in
+			lcase2@lcase4,lcoul,dim
 ;;
 
 let mettre_a_jour_configuration (conf:configuration) (cp:coup): configuration=
@@ -416,13 +417,13 @@ let rec faire_un_triangle (dim:dimension) ((i,j,k):case) : case list =
 
 let  toutes_les_cases (config:configuration):case list =
 	let liste_case, liste_couleur, dim = config in
-	let liste_sortie = (faire_un_triangle (2*dim-1) (-1,(-1*dim)+1,dim))@(remplir_segment (2*dim+1) (0,(-1*dim),dim)) in
+	let liste_sortie = (faire_un_triangle (2*dim) (-1,(-1*dim)+1,dim))@(remplir_segment (2*dim+1) (0,(-1*dim),dim)) in
 	let rec aux (lcase:case list)=
 		match lcase with
 		|[]->[]
 		|case::fin->(tourner_case (6/(List.length liste_couleur)) case)::(aux fin)
 	in
-	(aux liste_sortie)@(faire_un_triangle (2*dim-1) (-1,(-1*dim)+1,dim))
+	(aux liste_sortie)@(faire_un_triangle (2*dim) (-1,(-1*dim)+1,dim))
 ;;
 
 let rec comparer_elt_list (elt:case) (liste_case:case_coloree list):bool=
@@ -448,40 +449,39 @@ toutes_les_cases ([],[Vert;Rouge],1);;
 
 List.map (fun e -> est_dans_losange e 4) (toutes_les_cases ([],[Bleu],4));;
 
-toutes_les_cases ([],[Bleu],2);;
+toutes_les_cases ([],[Bleu],3);;
+List.length (toutes_les_cases ([],[Bleu],3));;
 
-let rec liste_des_coups (config:configuration) (case:case):(case*coup)list=
+let rec liste_des_coups (config:configuration) (case:case) (liste_case_libre:case_coloree list):(case*coup)list=
 	(*parcours la liste de case et test si un coup partant de la case en paramètres peut arriver a la case de la liste*)
-	let liste_case, liste_couleur, dim = config in
-	match liste_case with 
+	match liste_case_libre with 
 	|[] -> []
-	|(cs,couleur)::t -> if est_coup_valide (config) (Du(case,cs)) then :
-												(case,Du(case,cs))::(liste_des_coups (t,liste_couleur,dim) case) 
+	|(cs,couleur)::t -> if est_coup_valide (config) (Du(case,cs)) then 
+												(case,Du(case,cs))::(liste_des_coups config case t) 
 											else 
-												liste_des_coups (t,liste_couleur,dim) case
+												liste_des_coups config case t
 ;;
 
-liste_des_coups (remplir_init [Vert;Rouge] 3) (-4,1,3);; 
+liste_des_coups config (-4,1,3) (colorie Libre (toutes_les_cases config));;
+est_coup_valide (config) (Du((-4,1,3),(0,0,0)))
 
-
-let rec test_des_coups (config:configuration):(case * coup) list=
-	let liste_cases,liste_couleur,dim = config in 
-	match liste_cases with 
-	|[] -> []
-	|(case,coul)::t -> (liste_des_coups (t,liste_couleur,dim) case )@(test_des_coups (t,liste_couleur,dim))
-;;
 
 let coup_possibles (config:configuration) (case:case_coloree):(case*coup) list =
 	let case_liste, couleur_liste, dim = config in 
-	let les_cases = toutes_les_cases config  in 
+	let les_cases = colorie Libre (toutes_les_cases config)  in 
 	let cs, couleur = case in
-	liste_des_coups ((colorie Libre les_cases)@case_liste,couleur_liste,dim) cs
+	liste_des_coups ((enlever_case_en_trop les_cases case_liste )@case_liste,couleur_liste,dim) cs
 ;;
+
+coup_possibles config ((-4,1,3),Vert);;
 let config =  (remplir_init [Vert;Rouge] 3);;
 let liste_case_coloree,liste_couleur,dim = config;;
 let les_cases= colorie Libre (toutes_les_cases config);;
+comparer_elt_list (-4,1,3) liste_case;;
 let les_cases_sans_plus = enlever_case_en_trop les_cases liste_case;; 
 List.length les_cases_sans_plus ;;
+List.length les_cases;;
+
 
 (*Q30*)
 let rec que_mes_pions (liste_case:case_coloree list) (coul:couleur):case_coloree list=
@@ -520,3 +520,6 @@ let strategie_gloutonne (config:configuration):coup=
 	let coup_liste = tous_les_coups mes_cases config in
 	heuristique coup_liste
 ;;
+
+let config =  (remplir_init [Vert;Rouge] 3);;
+strategie_gloutonne config;;
