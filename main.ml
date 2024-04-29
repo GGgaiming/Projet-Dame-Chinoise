@@ -79,7 +79,7 @@ let translate ((i,j,k): case) ((v1,v2,v3): vecteur) : case = (i+v1,j+v2,k+v3);;
 (*
 	Question 6 :
 *)
-let diff_case ((i,j,k): case) ((v1,v2,v3): vecteur) : case = (i-v1,j-v2,k-v3);;
+let diff_case ((i,j,k): case) ((v1,v2,v3): case) : vecteur = (i-v1,j-v2,k-v3);;
 
 
 (*
@@ -89,9 +89,8 @@ let diff_case ((i,j,k): case) ((v1,v2,v3): vecteur) : case = (i-v1,j-v2,k-v3);;
 let sont_cases_voisines ((i,j,k):case) ((x,y,z):case):bool=
 	let valeur=diff_case(i,j,k)(x,y,z) in 
 	let a,b,c=valeur in 
-	((a<=1) && (b<=1))||((a<=1) && (c<=1))||((b<=1) && (c<=1))
+	((a<=1) && (b<=1)) && (c<=1) && ((a>=(-1)) && (b>=(-1))) && (c>=(-1))
 ;;
-
 
 (*
 	Question 8 :
@@ -253,8 +252,7 @@ let est_coup_valide (conf:configuration) (cp:coup):bool=
 match cp with
 |Du(c1,c2) ->
     let lcase,lcoul,dim=conf in
-    (sont_cases_voisines c1 c2)&&((associe c1 lcase Libre)=(List.hd lcoul))
-    &&(associe c2 lcase Libre =Libre)&&(est_dans_losange c2 dim)
+    (sont_cases_voisines c1 c2)&&((associe c1 lcase Libre)=(List.hd lcoul))&&(associe c2 lcase Libre =Libre)&&(est_dans_losange c2 dim)
 |_-> failwith "Saut multiples non implementes"
 ;;
 
@@ -339,8 +337,7 @@ let est_coup_valide (conf:configuration) (cp:coup):bool=
 match cp with
 |Du(c1,c2) ->
     let lcase,lcoul,dim=conf in
-    (sont_cases_voisines c1 c2)&&((associe c1 lcase Libre)=(List.hd lcoul))
-    &&(associe c2 lcase Libre =Libre)&&(est_dans_losange c2 dim)
+    (sont_cases_voisines c1 c2)&&((associe c1 lcase Libre)=(List.hd lcoul))&&(associe c2 lcase Libre =Libre)&&(est_dans_losange c2 dim)
 |Sm([])->true
 |Sm(pr::fin)-> est_saut_multiple (pr::fin) conf
 ;;
@@ -470,7 +467,7 @@ let coup_possibles (config:configuration) (case:case_coloree):(case*coup) list =
 	let case_liste, couleur_liste, dim = config in 
 	let les_cases = colorie Libre (toutes_les_cases config)  in 
 	let cs, couleur = case in
-	liste_des_coups ((enlever_case_en_trop les_cases case_liste )@case_liste,couleur_liste,dim) cs
+	liste_des_coups (case_liste,couleur_liste,dim) cs (enlever_case_en_trop les_cases case_liste )
 ;;
 
 coup_possibles config ((-4,1,3),Vert);;
@@ -513,7 +510,7 @@ let rec heuristique (liste_coup :(case * coup) list):coup =
 ;;
 
 
-let strategie_gloutonne (config:configuration):coup=
+let strategie_gloutonne (config:configuration)=
 	let liste_case, liste_couleur,dim = config in
 	let ma_coul::reste = liste_couleur in 
 	let mes_cases = que_mes_pions (liste_case) ma_coul in
