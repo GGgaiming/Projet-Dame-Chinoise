@@ -443,11 +443,13 @@ let rec enlever_case_en_trop (liste_caselibre:case_coloree list) (liste_casepris
 ;;
 toutes_les_cases ([],[Vert;Rouge],1);;
 
-
+(*
 List.map (fun e -> est_dans_losange e 4) (toutes_les_cases ([],[Bleu],4));;
 
 toutes_les_cases ([],[Bleu],3);;
 List.length (toutes_les_cases ([],[Bleu],3));;
+*)
+
 
 let rec liste_des_coups (config:configuration) (case:case) (liste_case_libre:case_coloree list):(case*coup)list=
 	(*parcours la liste de case et test si un coup partant de la case en paramètres peut arriver a la case de la liste*)
@@ -459,9 +461,10 @@ let rec liste_des_coups (config:configuration) (case:case) (liste_case_libre:cas
 												liste_des_coups config case t
 ;;
 
+(*
 liste_des_coups config (-4,1,3) (colorie Libre (toutes_les_cases config));;
 est_coup_valide (config) (Du((-4,1,3),(0,0,0)))
-
+*)
 
 let coup_possibles (config:configuration) (case:case_coloree):(case*coup) list =
 	let case_liste, couleur_liste, dim = config in 
@@ -470,6 +473,8 @@ let coup_possibles (config:configuration) (case:case_coloree):(case*coup) list =
 	liste_des_coups (case_liste,couleur_liste,dim) cs (enlever_case_en_trop les_cases case_liste )
 ;;
 
+
+(*test
 coup_possibles config ((-4,1,3),Vert);;
 let config =  (remplir_init [Vert;Rouge] 3);;
 let liste_case_coloree,liste_couleur,dim = config;;
@@ -478,7 +483,7 @@ comparer_elt_list (-4,1,3) liste_case;;
 let les_cases_sans_plus = enlever_case_en_trop les_cases liste_case;; 
 List.length les_cases_sans_plus ;;
 List.length les_cases;;
-
+*)
 
 (*Q30*)
 let rec que_mes_pions (liste_case:case_coloree list) (coul:couleur):case_coloree list=
