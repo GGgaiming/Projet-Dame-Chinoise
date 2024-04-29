@@ -89,7 +89,7 @@ let diff_case ((i,j,k): case) ((v1,v2,v3): vecteur) : case = (i-v1,j-v2,k-v3);;
 let sont_cases_voisines ((i,j,k):case) ((x,y,z):case):bool=
 	let valeur=diff_case(i,j,k)(x,y,z) in 
 	let a,b,c=valeur in 
-	((a<=1) && (b<=1))||((a<=1) && (c<=1))||((b<=1) && (c<=1))
+	((a<=1) && (b<=1)) && (c<=1) && ((a>=(-1)) && (b>=(-1))) && (c>=(-1))
 ;;
 
 
