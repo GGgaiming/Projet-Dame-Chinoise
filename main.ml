@@ -416,20 +416,37 @@ let rec faire_un_triangle (dim:dimension) ((i,j,k):case) : case list =
 
 let  toutes_les_cases (config:configuration):case list =
 	let liste_case, liste_couleur, dim = config in
-	let liste_sortie = (faire_un_triangle (2*dim) (-1,(-1*dim)-1,dim))@(remplir_segment (2*dim+1) (0,-1*dim,dim)) in
+	let liste_sortie = (faire_un_triangle (2*dim-1) (-1,(-1*dim)+1,dim))@(remplir_segment (2*dim+1) (0,(-1*dim),dim)) in
 	let rec aux (lcase:case list)=
 		match lcase with
 		|[]->[]
-		|case::fin->(tourner_case (3) case)::(aux fin)
+		|case::fin->(tourner_case (6/(List.length liste_couleur)) case)::(aux fin)
 	in
-	(aux liste_sortie)@(faire_un_triangle (2*dim) (-1,(-1*dim)-1,dim))
+	(aux liste_sortie)@(faire_un_triangle (2*dim-1) (-1,(-1*dim)+1,dim))
+;;
+
+let rec comparer_elt_list (elt:case) (liste_case:case_coloree list):bool=
+	match liste_case with
+	|[]->false
+	|(case,couleur)::t-> if elt = case then
+						true
+					else
+						comparer_elt_list elt t
 ;;
 
 
+let rec enlever_case_en_trop (liste_caselibre:case_coloree list) (liste_caseprise:case_coloree list):case_coloree list =
+	match liste_caselibre with
+	|[]->[]
+	|(case,couleur)::t-> if comparer_elt_list case liste_caseprise then 
+						enlever_case_en_trop t liste_caseprise
+					else
+						(case,couleur)::(enlever_case_en_trop t liste_caseprise)
+;;
 toutes_les_cases ([],[Vert;Rouge],1);;
 
 
-List.map (fun e -> est_dans_etoile e 2) (toutes_les_cases ([],[Bleu],2));;
+List.map (fun e -> est_dans_losange e 4) (toutes_les_cases ([],[Bleu],4));;
 
 toutes_les_cases ([],[Bleu],2);;
 
@@ -438,22 +455,13 @@ let rec liste_des_coups (config:configuration) (case:case):(case*coup)list=
 	let liste_case, liste_couleur, dim = config in
 	match liste_case with 
 	|[] -> []
-	|(cs,couleur)::t -> if est_coup_valide (config) (Du(case,cs)) then (case,Du(case,cs))::liste_des_coups (t,liste_couleur,dim) case else liste_des_coups (t,liste_couleur,dim) case
+	|(cs,couleur)::t -> if est_coup_valide (config) (Du(case,cs)) then :
+												(case,Du(case,cs))::(liste_des_coups (t,liste_couleur,dim) case) 
+											else 
+												liste_des_coups (t,liste_couleur,dim) case
 ;;
 
-let rec faire_les_sm (cp:coup) (liste_case:case liste): coup list=
-	match liste_case with
-	|[]->[]
-	|h::t -> 
-
-let conversion_cp (cp:coup) (liste_case:case list):coup=
-	(*fonction qui convertit les coup Du en coup sm si besoin*)
-	match cp with 
-	|Du(c1,c2) when sont_cases_voisines c1 c2 -> cp
-	|Du(c1,c2) -> 
-;;
-
-
+liste_des_coups (remplir_init [Vert;Rouge] 3) (-4,1,3);; 
 
 
 let rec test_des_coups (config:configuration):(case * coup) list=
@@ -469,7 +477,11 @@ let coup_possibles (config:configuration) (case:case_coloree):(case*coup) list =
 	let cs, couleur = case in
 	liste_des_coups ((colorie Libre les_cases)@case_liste,couleur_liste,dim) cs
 ;;
-
+let config =  (remplir_init [Vert;Rouge] 3);;
+let liste_case_coloree,liste_couleur,dim = config;;
+let les_cases= colorie Libre (toutes_les_cases config);;
+let les_cases_sans_plus = enlever_case_en_trop les_cases liste_case;; 
+List.length les_cases_sans_plus ;;
 
 (*Q30*)
 let rec que_mes_pions (liste_case:case_coloree list) (coul:couleur):case_coloree list=
