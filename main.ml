@@ -297,10 +297,10 @@ let rec aux (v,d:vecteur*int) (c1:case) (c2:case)=
     |n->(let (a,b,c)=c1 in (quelle_couleur ((a+(n-1)*i),(b+(n-1)*j),(c+(n-1)*k)) conf)=Libre)&&(aux (v,(n-2)) c1 c2) 
     in
 aux (v,d) c1 c2;;
-"""
+(*
 let conf2=([((0,0,0),Bleu);((1,1,1),Libre);((2,2,2),Bleu)],[Bleu],3)
 let conf3=([((0,0,0),Libre);((1,1,1),Bleu);((2,2,2),Bleu)],[Bleu],3)
-"""
+*)
 
 (*
     Question 23 :	 
