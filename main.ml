@@ -238,7 +238,7 @@ let rec aux (lcase:case_coloree list):case_coloree list=
     match lcase with
     |[]->[]
     |(c,_)::fin->fin
-    |pr::fin->(aux fin)
+    |pr::fin->pr::(aux fin)
 in
 (aux lcase),lcoul,dim;;
 
